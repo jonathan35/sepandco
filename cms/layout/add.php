@@ -241,9 +241,11 @@ $('.add-trigger').click(function(){
 
             
             $item = 1;
-            $i = $col = $rowCount = 0;
+            $col = $rowCount = 0;
             foreach((array)$fields as $field){
                 
+                $i = 0;
+
                 if(empty($attributes[$field])) $attributes[$field] = '';
                 if(empty($style[$field])) $style[$field] = '';
                 if(empty($type[$field])) $type[$field] = '';
@@ -395,12 +397,13 @@ $('.add-trigger').click(function(){
                                 <input name="<?php echo $field?>" type="text" class="datepicker" value="<?php echo $value[$field]?>" <?php echo $attrs?> style="width:<?php echo $width[$field]?> <?php echo $styles?>"> 
                             <?php }elseif($type[$field] == 'image' || $type[$field] == 'video'){?>
                                 <div style="margin-bottom:10px; text-align:left;">
-                                    <?php $i++;
+                                    <?php 
+                                    $i++;
                                     if($i ==1){
                                         if(!empty($remark[$field])){
-                                            echo $remark[$field];
+                                            echo '<div class="text-muted">'.$remark[$field].'</div>';
                                         }else{
-                                            echo '<div><small class="text-muted" >Recommanded size: 1200 x 1000 pixel</small></div>';
+                                            echo '<div class="text-muted">Recommanded size: 1200 x 1000 pixel</div>';
                                         }
                                     }?>
                                 <?php if($_GET['id']){//Remove feature only available when edit mode?>
@@ -412,7 +415,7 @@ $('.add-trigger').click(function(){
                                                                 <?php if(!empty($value[$field])){?>
                                                     <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')" 
                                                     style="margin:10px 0 20px 0;">
-                                                        <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Remove
+                                                        Remove
                                                     </div>
                                                 <?php }?>
                                             </div>                                     
@@ -433,10 +436,10 @@ $('.add-trigger').click(function(){
                                                 </div>
                                                 <div class="col-12" style="margin:10px 0 20px 0;">
                                                     <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')">
-                                                    <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Remove
+                                                    Remove
                                                     </div>
                                                     <div class="btn btn-xs btn-warning" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')">
-                                                    <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Unlink
+                                                    Unlink
                                                     </div>
                                                 </div>
                                             </div>
@@ -520,12 +523,19 @@ $('.add-trigger').click(function(){
                                 <?php }?>
                             <?php }elseif($type[$field] == 'file'){?>
                                 <div style="width:<?php echo $width[$field]?>">
-                                <?php if($_GET['id']){?>
-                                    <a href="../../<?php echo $value[$field]?>" target="_blank" style="display:inline-block; width:8%;">
-                                    <span class="glyphicon glyphicon-file"></span>
-                                    </a>
-                                <?php }?>
-                                <input type="<?php echo $type[$field]?>" name="<?php echo $field?>[]" value="<?php echo $value[$field]?>" <?php echo $attrs?> style=" display:inline-block; width:84%; <?php echo $styles?>">
+                                    <?php if(!empty($value[$field]) && $_GET['id']){?>
+                                        <a href="../../<?php echo $value[$field]?>" target="_blank" style="display:inline-block; width:8%;">
+                                        <img src="<?php echo ROOT?>cms/images/file_icon.svg">
+                                        </a>
+                                    <?php }?>
+                                    <input type="<?php echo $type[$field]?>" name="<?php echo $field?>[]" value="<?php echo $value[$field]?>" <?php echo $attrs?> style=" display:inline-block; width:84%; <?php echo $styles?>">
+                                    <div class="def_img_bg" id="preview<?php echo $field?>" style="overflow:show;">
+                                    <img src="../../<?php echo $value[$field]?>" class="img-fluid" alt="" >
+                                    <?php if(!empty($value[$field])){?>
+                                        <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')" 
+                                        style="margin:10px 0 20px 0;">Remove</div>
+                                    <?php }?>
+                                </div>
                                 </div>
                                 
                             <?php }elseif($type[$field] == 'password'){?>
@@ -539,7 +549,8 @@ $('.add-trigger').click(function(){
                             <?php 
                             if($type[$field] != 'image' && $type[$field] != 'video'){
                                 if(!empty($remark[$field])){
-                                    echo '<label></label><div class="div_input" style="padding-left:4px; color: gray;">'.$remark[$field].'</div>';
+                                    echo '<label></label> 
+                                    <div class="text-muted div_input">'.$remark[$field].'</div>';
                                 }
                             }
                             ?>

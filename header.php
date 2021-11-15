@@ -28,13 +28,15 @@
 <div class="menu collapse" id="toggleMenu">
     <div class="menu-inner">
         <div class="row">
-            <div class="d-none d-md-inline col-md"></div>                        
+            <div class="d-none d-md-inline col-md"></div>
             <div class="col-12 col-md p-2">
-
-            <a href="<?php echo ROOT?>products">Products</a>
-            </div>            
+                <a href="<?php echo A_ROOT?>">Home</a>
+            </div>
             <div class="col-12 col-md p-2">
-            <a href="<?php echo ROOT?>news">Updates</a>
+                <a href="<?php echo ROOT?>products">Products</a>
+            </div>
+            <div class="col-12 col-md p-2">
+                <a href="<?php echo ROOT?>updates">Updates</a>
             </div>            
             <div class="col-12 col-md p-2">
             <a href="<?php echo ROOT?>contact_us">Contact Us</a>

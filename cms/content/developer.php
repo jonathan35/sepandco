@@ -13,7 +13,7 @@ if($_SESSION['validation']=='YES'){
 }
 
 $table = 'developer';
-$module_name = 'Developer';
+$module_name = 'Brands';
 $php = 'developer';
 $folder = 'content';
 $add = true;
@@ -98,8 +98,8 @@ foreach((array)$fields as $field){
 echo '</div>';
 */
 $cols = $items =array();
-$cols = array('Developer Photo' => '3', 'Position' => '9');//Column title and width
-$items['Developer Photo'] = array('developer_photo');
+$cols = array('Brand Photo' => '3', 'Position' => '9');//Column title and width
+$items['Brand Photo'] = array('developer_photo');
 $items['Position'] = array('position');
 //$items['Programme'] = array('programme','experience','experience_detail');
 //$items['Condition'] = array('illnesses','bankrupt','court');

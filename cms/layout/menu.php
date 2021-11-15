@@ -3,8 +3,8 @@
 
   <h4>Home</h4>
   <div class="nav lnav" link="../content/banner">Banner</div>
-  <div class="nav lnav" link="../content/developer">Developer</div>
-  <div class="nav lnav" link="../content/home_block">Why Choose Us?</div>
+  <div class="nav lnav" link="../content/developer">Home Brands</div>
+  <div class="nav lnav" link="../content/home_block">Why Choose Us</div>
   <!--<div class="nav lnav" link="../content/banner_dashboard?id=Mg==">Banner (Account Dashboard)</div>-->
 
 
@@ -13,17 +13,20 @@
   <div class="nav lnav" link="../product/category">Category</div>
   <div class="nav lnav" link="../product/sub_category">Sub Category</div>
   <div class="nav lnav" link="../product/product">Product</div>
-  <div class="nav lnav" link="../product/message?tab=New">Message</div>
+  <div class="nav lnav" link="../product/message?tab=New">Enquiry</div>
+  <div class="nav lnav" link="../product/analytic_report">
+    Product Analytic 
+    <span style="font-size:80%; color:red;">new</span>
+  </div>
 
 
-
-  <h4>Pre-desgin</h4>
+  <h4>Pre-design</h4>
   <div class="nav lnav" link="../content/contact_us?id=MQ==&no_list=true">Contact Us</div>
   <div class="nav lnav" link="../content/message_contact?tab=New">Contact Message</div>
   <div class="nav lnav" link="../content/news">Updates</div>
 
-  <h4>Free-Formated</h4>
-  <div class="nav lnav" link="../content/pages">Pages</div>
+  <h4>Free-format</h4>
+  <div class="nav lnav" link="../content/pages">Dynamic Pages</div>
 
 
   <? /*

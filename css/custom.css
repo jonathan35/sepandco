@@ -197,7 +197,7 @@ text-decoration: none;
   overflow: visible;
   margin-bottom: 10px;
 }
-/* ------------------------------------- Property ------------------------------------- */
+/* ------------------------------------- Product ------------------------------------- */
 
 .bg-contain {
   background-repeat: no-repeat;
@@ -209,6 +209,41 @@ text-decoration: none;
   background-size: cover;
   background-position: center;
 }
+
+
+.ic-search {
+  width:0;
+  height:0;
+  overflow: visible;
+  position: relative;
+  /*top: 31px;*/
+  left: 14px;
+  color:#BBB;
+  display: inline-block;
+
+}
+@media (max-width: 575px) {
+  #search_from {
+    top:-25px;
+    height:30px;
+    position: relative;
+  }
+}
+
+
+.ic-search > .fa {
+  display: inline-block;
+}
+.h-search {
+  padding-left:30px;
+  box-shadow: inset 2px 2px 2px rgba(0,0,0,.2);
+  border-top:1px solid white;
+  border-left:1px solid white;
+  border-right:1px solid #e6e6e6;
+  border-bottom:1px solid #e6e6e6;
+  background: #f0f0f0;
+}
+
 
 .list-zoom {
   overflow: hidden;  
@@ -251,7 +286,7 @@ text-decoration: none;
 
 .feature-icon {
   position: relative;
-  z-index:999;
+  z-index:19;
   display:inline-block;
   width:30px;
   height:30px;
@@ -267,7 +302,7 @@ text-decoration: none;
   border-radius: 50%;
   width:40px;
   height: 40px;
-  z-index: 4;
+  z-index: 21;
   background-color: rgba(0,0,0,0.5);
  box-shadow: 0 0 6px rgba(0,0,0,0.8);
   text-align: center;
@@ -281,7 +316,11 @@ text-decoration: none;
 
 @media (max-width: 575px) {
   .category-panel {
+    top: 20px;
+    z-index: 20;
     visibility: hidden;
+    height: 0;
+    overflow: visible;
   }
   .category-active {
     background:white;  
@@ -291,7 +330,7 @@ text-decoration: none;
     box-shadow: 0 0 40px black;
     left: 2%;
     visibility: visible;
-    position: fixed;
+    position: absolute;
   }
 }
 

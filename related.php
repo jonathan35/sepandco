@@ -1,5 +1,4 @@
-<div class="pt-5"><br><br><br></div>
-<div class="col-12 pl-5 pl-md-0">
+<div class="col-12 p-1 pl-md-0 pt-2">
     <h2>Related Products of Interest</h2>
 </div>
 <div class="row">

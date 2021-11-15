@@ -52,6 +52,32 @@ if(!empty($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['email'])
     }
 }
 
+
+if(!empty($_GET['p'])){
+
+    $product_name = $str_convert->to_query($_GET['p']);
+    $product = sql_read("select * from product where status=1 and name like ? limit 1", 's', '%'.$product_name.'%');
+    $photos = sql_read("select * from photos where parent_table=? and parent_id=?", 'si', array('product', $product['id']));
+
+
+    //---------------- Update product_analytic > click ---------------------
+    if(!empty($product['id'])){
+        $exist = sql_read("select id, click from product_analytic where product=? limit 1", 'i', $product['id']);
+
+        if(!empty($exist['id'])){
+            $analytic['id'] = $exist['id'];
+            $analytic['click'] = $exist['click'] + 1;
+        }else{
+            $analytic['product'] = $product['id'];
+            $analytic['click'] = 1;
+        }
+        
+        sql_save("product_analytic", $analytic);
+    }
+
+    
+}
+
 ?>
 
 
@@ -70,14 +96,6 @@ if(!empty($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['email'])
 
         <div class="row"><div class="col-12"><br></div></div>
         
-        <?php 
-        if(!empty($_GET['p'])){
-            $product_name = $str_convert->to_query($_GET['p']);
-            $product = sql_read("select * from product where status=1 and name like ? limit 1", 's', '%'.$product_name.'%');
-            $photos = sql_read("select * from photos where parent_table=? and parent_id=?", 'si', array('product', $product['id']));
-      
-        }
-        ?>
         <div class="row wave_rec">
             <div class="col-12">
                 <div class="p-2">
@@ -124,16 +142,22 @@ if(!empty($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['email'])
                                         </script>
                                         
                                     </div>
-                                    <div class="row">
-                                        <div class="col d-none d-md-block pt-5">
-                                            <?php include 'related.php';?>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
-                                <div class="col-12 col-md-5 pt-5 pt-md-0 pr-md-5 pl-md-4 text-left">
+                                <div class="col-12 col-md-5 pt-5 pt-md-0 pl-md-4 text-left">
                                     <?php if(!empty($product['name'])){?>
                                         <div class="row">
-                                            <h2 class="p-1"><?php echo $product['name'];?></h2>
+                                            <h2 class="p-1" style="color:orange;">
+                                                <?php echo $product['name'];?>
+                                            </h2>
+                                        </div>
+                                    <?php }?>
+                                    <?php 
+                                    if(!empty($product['brand'])){
+                                        $brand = sql_read("select brand from brand where id=? limit 1", 'i', $product['brand']);
+                                        ?>
+                                        <div class="row">
+                                            <div class="p-1"><?php echo $brand['brand']?></div>
                                         </div>
                                     <?php }?>
                                     <?php if($product['new_arrival'] == 'Yes'){?>
@@ -142,19 +166,33 @@ if(!empty($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['email'])
                                         </div>
                                     <?php }?>
                                    
-                                    <?php if(!empty($product['promotion_until'])){?>
+                                    <?php if(!empty($product['promotion_until']) && $product['promotion_until'] != '0000-00-00'){?>
                                         <div class="row">
                                             <div class="p-1">
-                                            Promotion end at <?php echo date('d/m/Y', strtotime($product['promotion_until']));?>
+                                            Promotion until <?php echo date('d/m/Y', strtotime($product['promotion_until']));?>
                                             </div>
                                         </div>
                                     <?php }?>
                                     
                                     <div class="row">
                                         <div class="p-1">
-                                        Stock: <?php if(!empty($product['in_stock'])) echo 'Yes'; else echo 'No';?>
+                                            <?php if(strtotime($product['clearance_sale_date']) >= strtotime(date('Y-m-d'))){?>
+                                                <div class="feature-icon"><img src="<?php echo ROOT?>images/clear-20.png" title="Clearance Sale"></div>
+                                                CLEARANCE:<br> 
+                                                <?php echo $product['clearance_sale_title'];?>
+                                                <br>
+                                                END DATE: 
+                                                <?php echo $product['clearance_sale_date'];?>
+                                            <?php }?>
                                         </div>
                                     </div>
+                                    <?php if(!empty($product['in_stock'])){?>
+                                    <div class="row">
+                                        <div class="p-1">
+                                        In-Stock: <?php echo $product['in_stock'];?>
+                                        </div>
+                                    </div>
+                                    <?php }?>
                                     <?php if(!empty($product['pdf'])){?>
                                     <div class="row">
                                         <div class="p-1">
@@ -168,83 +206,94 @@ if(!empty($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['email'])
                                     </div>
                                     <?php }?>
                                    
-                                    <div class="row">
-                                        <div class="p-1">
-                                            <?php if(strtotime($product['clearance_sale_date']) >= strtotime(date('Y-m-d'))){?>
-                                                <div class="feature-icon"><img src="<?php echo ROOT?>images/clear-20.png" title="Clearance Sale"></div>
-                                                CLEARANCE:<br> 
-                                                <?php echo $product['clearance_sale_title'];?>
-                                                <br>
-                                                END DATE: 
-                                                <?php echo $product['clearance_sale_date'];?>
-                                            <?php }?>
-                                        </div>
-                                    </div>
+                                    
                                     <?php if($product['qr_code']){?>
                                     <div class="text-center">
                                         <img src="<?php echo ROOT.$product['qr_code'];?>" class="img-fluid">
                                     </div>
                                     <?php }?>
 
-                                    <?php if(!empty($product['description'])){?>
-                                        <div class="row">
-                                            <div class="col-12 pt-4">
-                                                <?php 
-                                                $product['description'] = str_replace(array('../../', '<img'), array(ROOT, '<img class="img-fluid"'), $product['description']);                
-                                                echo $product['description'];?>                                    
-                                            </div>
-                                        </div>
-                                    <?php }?>
+                                    
 
 
                                     <div class="row"><div class="col-12"><br></div></div>
-                                    <div class="row">
-                                        <div class="col-12 p-2 pl-4 pr-4">
-                                            <h1>Leave a message</h1>
-                                        </div>
-                                    </div>
-                                    <form action="" class="form-group" method="post">
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <input type="text" name="product" value="<?php echo $product['name'];?>" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <input type="text" name="name" placeholder="Name" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <input type="email" name="email" placeholder="Email" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <input type="text" name="contact" placeholder="Contact number" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <textarea type="text" name="message" placeholder="Message" class="form-control" required></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <div id="recaptcha" title="no"></div>
-                                            </div>
-                                        </div>
-
-                                        
-
-                                        <div class="row">
-                                            <div class="col-12 p-2 pl-4 pr-4">
-                                                <input type="submit" name="submit" value="Send Message" class="btn btn-primary pl-4 pr-4">
-                                            </div>
-                                        </div>
-                                    </form>
+                                    
                                 </div>
                             <?php }?>
+
+                        </div>
+
+                        <div class="row p-4">
+
+                            <div class="col-12 p-2" style="border:1px solid #CCC;">
+                                <?php if(!empty($product['description'])){?>
+                                    <div class="row">
+                                        <div class="col-12 pt-4">
+                                            <?php 
+                                            $product['description'] = str_replace(array('../../', '<img'), array(ROOT, '<img class="img-fluid"'), $product['description']);                
+                                            echo $product['description'];?>                                    
+                                        </div>
+                                    </div>
+                                <?php }?>
+                            </div>
+                        </div>
+
+
+                        <div class="row p-4 pt-5">
+                            <div class="col-12 col-md-7">
+                                <div class="row">
+                                    <div class="col d-none d-md-block">
+                                        <?php include 'related.php';?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 offset-md-1">
+                                <div class="row">
+                                    <div class="col-12 p-2">
+                                        <h2>Leave a message</h2>
+                                    </div>
+                                </div>
+                                <form action="" class="form-group" method="post">
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <input type="text" name="product" value="<?php echo $product['name'];?>" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <input type="text" name="name" placeholder="Name" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <input type="email" name="email" placeholder="Email" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <input type="text" name="contact" placeholder="Contact number" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <textarea type="text" name="message" placeholder="Message" class="form-control" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <div id="recaptcha" title="no"></div>
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    <div class="row">
+                                        <div class="col-12 p-2">
+                                            <input type="submit" name="submit" value="Send Message" class="btn btn-primary pl-4 pr-4">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
 
                         </div>
                     </div>

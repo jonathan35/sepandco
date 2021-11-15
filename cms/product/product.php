@@ -25,7 +25,7 @@ $more_photos = true;
 
 $keyword = true;//Component to search by keyword
 $keywordMustFullWord=false;
-$keywordFields=array('name', 'location');
+$keywordFields=array('name');
 $filter = true;
 $filFields = array('brand', 'category');
 
@@ -40,7 +40,7 @@ $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('statu
 
 //$unique_validation=array('tier');
 
-$fields = array('id', 'brand', 'category', 'sub_category', 'photo', 'qr_code', 'pdf', 'name', 'new_arrival', 'best_deal', 'in_stock', 'hot_item', 'promotion_until', 'clearance_sale_title', 'clearance_sale_date', 'position', 'status', 'description');
+$fields = array('id', 'brand', 'category', 'sub_category', 'photo', 'qr_code', 'pdf', 'name', 'new_arrival', 'best_deal', 'in_stock', 'hot_item', 'promotion_until', 'clearance_sale_title', 'clearance_sale_date', 'position', 'status', 'seo_keyword', 'seo_description', 'description');
 
 
 
@@ -51,7 +51,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('7', '10'), 1 => array(1));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('7', '12'), 1 => array(1));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 $fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
 
 foreach((array)$fields as $field){
@@ -73,6 +73,8 @@ if(!empty($_GET['id'])){
 $label['size'] = 'Size (sq.ft.)';
 $type['pdf'] = 'file'; 
 $label['pdf'] = 'PDF File'; 
+$remark['pdf'] = 'Max. 8mb';
+
 
 $type['brand'] = 'select'; $option['brand'] = array();
 $results = sql_read('select * from brand where status=1 order by position ASC');
@@ -100,10 +102,13 @@ foreach((array)$results as $a){
 	}
 }
 
+$type['seo_keyword'] = 'textarea';
+$type['seo_description'] = 'textarea';
+
 
 $type['id'] = 'hidden';
 $type['photo'] = 'image';
-$type['qr_code'] = 'image'; $remark['qr_code'] = 'Recommanded size: 400 x 400 pixel';
+$type['qr_code'] = 'image'; $remark['qr_code'] = 'Recommanded size: 400 x 400 pixel. Max. 8mb.';
 $type['password'] = 'password';
 $type['bedrooms'] = 'number';
 $type['bathrooms'] = 'number';
@@ -143,7 +148,7 @@ $attributes['name'] = array('placeholder' => 'Product Name');
 $attributes['location'] = array('placeholder' => 'Product Location');
 $attributes['position'] = array('placeholder' => 'A number for sorting');
 
-$remark['photo'] = 'Recommanded size: 1200 x 1000 pixel';
+$remark['photo'] = 'Recommanded size: 1200 x 1000 pixel. Max. 8mb.';
 
 
 /*if(empty($id)){

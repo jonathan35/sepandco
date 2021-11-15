@@ -3,10 +3,28 @@ require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/str_convert.php';
 
+
+$seo_title = $seo_keyword = $seo_description = '';
+
+if (strpos($_SERVER['SCRIPT_NAME'], 'product_details.php') !== false && !empty($_GET['p'])) {
+    $product_name = $str_convert->to_query($_GET['p']);
+    $seo_product = sql_read("select * from product where status=1 and name like ? limit 1", 's', $product_name);
+    $seo_title = ' - '.$seo_product['name'];
+    $seo_keyword =  $seo_product['seo_keyword'];
+    $seo_description = $seo_product['seo_description'];
+}
+
+if (strpos($_SERVER['SCRIPT_NAME'], 'page.php') !== false && !empty($_GET['t'])) {
+    $title = $str_convert->to_query($_GET['t']);
+    $seo_page = sql_read("select title, seo_keyword, seo_description from pages where status = ? and title like ? limit 1", 'is', array(1, '%'.$title.'%'));
+    $seo_title = ' - '.$seo_page['title'];
+    $seo_keyword =  $seo_page['seo_keyword'];
+    $seo_description = $seo_page['seo_description'];
+}
 ?>
 <!DOCTYPE html>
 <head>
-    <title>Sep and Co</title>
+    <title>Sep and Co <?php echo $seo_title?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php {/**
@@ -29,6 +47,12 @@ require_once 'config/str_convert.php';
     <meta name="msapplication-TileImage" content="<?php echo ROOT?>images/logo.png">
     <meta name="theme-color" content="#ffffff">*/}?>
     <link rel="icon" href="<?php echo ROOT?>images/logo.png">
+    <?php if(!empty($seo_keyword)){?>
+    <meta name="keywords" content="<?php echo $seo_keyword?>">
+    <?php }?>
+    <?php if(!empty($seo_description)){?>
+    <meta name="description" content="<?php echo $seo_description?>">
+    <?php }?>
 
     <script src="<?php echo ROOT?>js/jquery.min.js"></script>
     <script src="<?php echo ROOT?>js/popper.min.js"></script>
